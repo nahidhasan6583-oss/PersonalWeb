@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAHID HEX - Gaming Studio & Esports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== Base & Variables ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Default Theme: Cyberpunk */
+        :root {
+            --bg: #050508;
+            --surface: #0f0f15;
+            --text: #ffffff;
+            --text-muted: #8a8a99;
+            --accent-cyan: #00f3ff;
+            --accent-magenta: #bc13fe;
+            --accent-green: #0aff00;
+            --border: rgba(0, 243, 255, 0.2);
+            --btn-bg: rgba(0, 243, 255, 0.1);
+            --shadow-cyan: rgba(0, 243, 255, 0.4);
+            --shadow-magenta: rgba(188, 19, 254, 0.4);
+        }
+
+        /* Theme 2: Matrix */
+        body.theme-matrix {
+            --bg: #050a05;
+            --surface: #0a140a;
+            --text: #ffffff;
+            --text-muted: #88a088;
+            --accent-cyan: #0aff00; /* Turned Green */
+            --accent-magenta: #ffffff; /* Turned White */
+            --accent-green: #0aff00;
+            --border: rgba(10, 255, 0, 0.2);
+            --btn-bg: rgba(10, 255, 0, 0.1);
+            --shadow-cyan: rgba(10, 255, 0, 0.4);
+            --shadow-magenta: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Theme 3: Blood Moon */
+        body.theme-blood {
+            --bg: #0a0505;
+            --surface: #150a0a;
+            --text: #ffffff;
+            --text-muted: #a08888;
+            --accent-cyan: #ff3b30; /* Turned Red */
+            --accent-magenta: #ff9b00; /* Turned Orange */
+            --accent-green: #ff3b30;
+            --border: rgba(255, 59, 48, 0.2);
+            --btn-bg: rgba(255, 59, 48, 0.1);
+            --shadow-cyan: rgba(255, 59, 48, 0.4);
+            --shadow-magenta: rgba(255, 155, 0, 0.4);
+        }
+
+        /* Theme 4: Synthwave */
+        body.theme-synthwave {
+            --bg: #08051a;
+            --surface: #110b2e;
+            --text: #ffffff;
+            --text-muted: #9888a8;
+            --accent-cyan: #ff00ff; /* Turned Pink */
+            --accent-magenta: #6a00ff; /* Turned Purple */
+            --accent-green: #00ffff;
+            --border: rgba(255, 0, 255, 0.2);
+            --btn-bg: rgba(255, 0, 255, 0.1);
+            --shadow-cyan: rgba(255, 0, 255, 0.4);
+            --shadow-magenta: rgba(106, 0, 255, 0.4);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background-color 0.5s ease;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                var(--border) 3px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        ::selection { background: var(--accent-magenta); color: #fff; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ===== Custom Crosshair Cursor ===== */
+        .cursor {
+            position: fixed;
+            width: 30px; height: 30px;
+            border: 2px solid var(--accent-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s, background 0.2s;
+            mix-blend-mode: difference;
+        }
+        .cursor::before, .cursor::after {
+            content: '';
+            position: absolute;
+            background: var(--accent-cyan);
+            transition: all 0.2s;
+        }
+        .cursor::before { top: 50%; left: -8px; width: 6px; height: 2px; transform: translateY(-50%); }
+        .cursor::after { top: 50%; right: -8px; width: 6px; height: 2px; transform: translateY(-50%); }
+        
+        .cursor.hover {
+            width: 50px; height: 50px;
+            background: var(--btn-bg);
+            border-color: var(--accent-magenta);
+        }
+
+        /* ===== Buttons ===== */
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--accent-cyan);
+            transform: translateX(-101%);
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+            z-index: -1;
+        }
+        .btn:hover { 
+            color: var(--bg); 
+            text-shadow: 0 0 10px var(--bg); 
+            box-shadow: 0 0 20px var(--shadow-cyan); 
+        }
+        .btn:hover::before { transform: translateX(0); }
+        
+        .btn-magenta {
+            color: var(--accent-magenta);
+            border-color: var(--accent-magenta);
+        }
+        .btn-magenta::before { background: var(--accent-magenta); }
+        .btn-magenta:hover { box-shadow: 0 0 20px var(--shadow-magenta); }
+
+        /* Theme Toggle Button */
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: none;
+            transition: all 0.3s ease;
+        }
+        .theme-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--shadow-cyan);
+        }
+
+        /* ===== Header ===== */
+        .header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 24px 0;
+            background: rgba(5, 5, 8, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.5s ease, background 0.5s ease;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--text);
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+        .logo span { color: var(--accent-magenta); }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+        .nav-links a {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .nav-links a:hover { 
+            color: var(--accent-cyan); 
+            text-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* ===== Hero Section with Video Background ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bg-video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.7;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg) 100%);
+            z-index: -1;
+            transition: background 0.5s ease;
+        }
+
+        .hero-content {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border: 1px solid var(--accent-cyan);
+            padding: 8px 24px;
+            background: var(--btn-bg);
+            box-shadow: 0 0 15px var(--shadow-cyan);
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(48px, 12vw, 160px);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            position: relative;
+            color: #fff;
+            text-shadow: 4px 4px 0px var(--accent-magenta), -2px -2px 0px var(--accent-cyan);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* ===== Marquee ===== */
+        .marquee {
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+            white-space: nowrap;
+            background: var(--surface);
+            transition: all 0.5s ease;
+        }
+        .marquee-track {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-item {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-right: 80px;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--text-muted);
+        }
+        .marquee-item span { color: var(--accent-green); -webkit-text-stroke: 0; }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ===== Games/Portfolio Grid ===== */
+        .games-section {
+            padding: 120px 0;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 80px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-title span { color: var(--accent-magenta); }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .game-card {
+            position: relative;
+            height: 450px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px var(--shadow-cyan);
+        }
+        .game-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        .game-card:hover .game-img { transform: scale(1.1); }
+        
+        .game-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+        }
+        .game-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* ===== Features ===== */
+        .features {
+            padding: 120px 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            transition: background 0.5s ease;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        .feature-item {
+            padding: 40px;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.3);
+            transition: all 0.4s ease;
+        }
+        .feature-item:hover {
+            border-color: var(--accent-magenta);
+            box-shadow: 0 0 20px var(--shadow-magenta);
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 40px;
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            display: block;
+        }
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: var(--bg);
+            padding: 120px 0 40px;
+            text-align: center;
+            transition: background 0.5s ease;
+        }
+        .footer-cta h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 4px 4px 0px var(--accent-cyan);
+        }
+        .footer-bottom {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ===== Scroll Reveal ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            body { cursor: auto; }
+            .cursor { display: none; }
+            .nav-links { display: none; }
+            .games-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 20px; }
+            .nav-actions { gap: 10px; }
+            .theme-btn { padding: 8px 12px; font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav">
+            <a href="#" class="logo">NAHID <span>HEX</span></a>
+            <ul class="nav-links">
+                <li><a href="#games">Games</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#esports">Esports</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            
+            <!-- Action Buttons (Theme Switcher + Join Now) -->
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-btn">Color</button>
+                <a href="https://discord.gg/DySqfFGN2" target="_blank" class="btn btn-magenta" style="padding: 10px 30px; font-size: 12px;">Join Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero with Video Background -->
+    <section class="hero">
+        <video autoplay muted loop id="bg-video" playsinline poster="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-city-at-night-11748-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        
+        <div class="container hero-content">
+            <div class="hero-eyebrow reveal">Next-Gen Gaming Studio</div>
+            <h1 class="reveal">ENTER<br>THE GRID</h1>
+            <p class="reveal">Experience the ultimate cyberpunk gaming universe. Built for gamers, by gamers. Play. Stream. Dominate.</p>
+            <div class="hero-actions reveal">
+                <a href="https://infoimbackbrother-cloud.github.io/nahidhex83" target="_blank" class="btn">Play Now</a>
+                <a href="https://www.youtube.com/@anamuslim_bd" target="_blank" class="btn btn-magenta">Watch Trailer</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <span class="marquee-item">CYBERPUNK</span>
+            <span class="marquee-item"><span>ESPORTS</span></span>
+            <span class="marquee-item">FPS</span>
+            <span class="marquee-item"><span>BATTLE ROYALE</span></span>
+            <span class="marquee-item">MMO</span>
+            <span class="marquee-item"><span>STREAMING</span></span>
+            <span class="marquee-item">CYBERPUNK</span>
+            <span class="marquee-item"><span>ESPORTS</span></span>
+            <span class="marquee-item">FPS</span>
+            <span class="marquee-item"><span>BATTLE ROYALE</span></span>
+        </div>
+    </div>
+
+    <!-- Games Portfolio -->
+    <section class="games-section" id="games">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Featured <span>Games</span></h2>
+                <a href="#" style="font-family: 'Orbitron'; color: var(--accent-cyan); letter-spacing: 2px;">VIEW ALL →</a>
+            </div>
+            
+            <div class="games-grid">
+                <div class="game-card reveal">
+                    <div class="game-img" style="background-image: url('https://i.ibb.co/5xGf5rHW/image.jpg');"></div>
+                    <div class="game-overlay">
+                        <div class="game-tag">FPS / Action</div>
+                        <h3 class="game-title">Neon Strike</h3>
+                    </div>
+                </div>
+                <div class="game-card reveal">
+                    <div class="game-img" style="background-image: url('https://i.ibb.co/VW4xZTZL/image.jpg');"></div>
+                    <div class="game-overlay">
+                        <div class="game-tag">RPG / Open World</div>
+                        <h3 class="game-title">Cyber Quest</h3>
+                    </div>
+                </div>
+                <div class="game-card reveal">
+                    <div class="game-img" style="background-image: url('https://i.ibb.co/tpQJ5Jwd/image.jpg');"></div>
+                    <div class="game-overlay">
+                        <div class="game-tag">Racing</div>
+                        <h3 class="game-title">Hyper Drive</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="reveal">
+                <h2 class="section-title">Why <span>NAHID HEX?</span></h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 20px auto 0;">We provide the ultimate infrastructure for your gaming needs.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item reveal">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Low Ping</h3>
+                    <p style="color: var(--text-muted);">Dedicated servers worldwide for zero-lag gameplay.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <span class="feature-icon">🎮</span>
+                    <h3 class="feature-title">Pro Servers</h3>
+                    <p style="color: var(--text-muted);">Custom modded servers for competitive esports.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <span class="feature-icon">🛡️</span>
+                    <h3 class="feature-title">Anti-Cheat</h3>
+                    <p style="color: var(--text-muted);">AI-powered anti-cheat to ensure fair play.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <span class="feature-icon">📡</span>
+                    <h3 class="feature-title">Live Streaming</h3>
+                    <p style="color: var(--text-muted);">Built-in streaming tools for Twitch and YouTube.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-cta reveal">
+                <h2>READY TO<br>PLAY?</h2>
+                <a href="mailto:nahidgamear@gmail.com" class="btn">Create Account</a>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2024 NAHID HEX. ALL RIGHTS RESERVED.</p>
+                <ul class="nav-links">
+                    <li><a href="https://discord.gg/DySqfFGN2" target="_blank">DISCORD</a></li>
+                    <li><a href="https://x.com/GamearNahid" target="_blank">TWITTER / X</a></li>
+                    <li><a href="https://store.steampowered.com/" target="_blank">STEAM</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== Custom Crosshair Cursor =====
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // ===== Theme Switcher Logic =====
+        const themeToggle = document.getElementById('theme-toggle');
+        const themes = ['theme-cyberpunk', 'theme-matrix', 'theme-blood', 'theme-synthwave'];
+        const themeNames = ['CYBERPUNK', 'MATRIX', 'BLOOD MOON', 'SYNTHWAVE'];
+        let currentThemeIndex = 0;
+
+        themeToggle.addEventListener('click', () => {
+            // Remove current theme class
+            document.body.classList.remove(themes[currentThemeIndex]);
+            // Move to next theme
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            // Apply new theme class
+            document.body.classList.add(themes[currentThemeIndex]);
+            // Update button text to show current theme
+            themeToggle.textContent = themeNames[currentThemeIndex];
+        });
+
+        // ===== Hover Effects for Cursor =====
+        document.querySelectorAll('a, .btn, .game-card, .feature-item, #theme-toggle').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ===== Scroll Reveal Animation =====
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+    </script>
+</body>
+</html>
